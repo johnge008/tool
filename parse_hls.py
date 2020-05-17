@@ -32,16 +32,12 @@ class HlsDownload(object):
     def __download_playlist(self, playlist, file_name: str):
         print('start download: ' + playlist.base_uri)
         self.__save_to_file(file_name, playlist.dumps(), 'w')
-        # only test download the fist one
-        is_fist = True
         for sm in playlist.segments:
             print('segment: ' + sm.absolute_uri)
-            if is_fist:
-                content = self.__download_segment(sm.absolute_uri)
-                if content is not None:
-                    sm_path = os.path.join(os.path.dirname(file_name), sm.uri)
-                    self.__save_to_file(sm_path, content, 'wb')
-                is_fist = False
+            content = self.__download_segment(sm.absolute_uri)
+            if content is not None:
+                sm_path = os.path.join(os.path.dirname(file_name), sm.uri)
+                self.__save_to_file(sm_path, content, 'wb')
 
     def __download_segment(self, segment_url: str):
         headers = {'User-Agent': self.ua}
